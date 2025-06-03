@@ -7,6 +7,8 @@
         <Entry x:Name="estudianteEntry" Placeholder="ID Estudiante" Keyboard="Numeric" />
         <Entry x:Name="materiaEntry" Placeholder="ID Materia" Keyboard="Numeric" />
         <Entry x:Name="calificacionEntry" Placeholder="Calificación" Keyboard="Numeric" />
+        <Entry x:Name="tituloEntry" Placeholder="Title" />
+        <Entry x:Name="contenidoEntry" Placeholder="Content" />
         <DatePicker x:Name="fechaPicker" />
         <Button Text="Guardar" Clicked="OnGuardarNota"/>
     </StackLayout>

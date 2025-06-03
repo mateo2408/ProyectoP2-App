@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Maui.Controls;
 using NotasAcademicasApp.Models;
 using NotasAcademicasApp.Services;
 
@@ -7,27 +9,24 @@ public partial class EstudianteFormPage : ContentPage
 {
     private readonly EstudianteService _service = new();
 
-    public EstudianteFormPage()
-    {
-        InitializeComponent();
-    }
+    public EstudianteFormPage() => InitializeComponent();
 
     private async void OnGuardarEstudiante(object sender, EventArgs e)
     {
         var estudiante = new Estudiante
         {
-            Nombre = nombreEntry.Text
+            Nombre = nombreEntry.Text,
         };
 
         var response = await _service.CreateEstudianteAsync(estudiante);
         if (response)
         {
-            await DisplayAlert("Éxito", "Estudiante guardado", "OK");
+            await DisplayAlert("Success", "Student added.", "OK");
             await Navigation.PopAsync();
         }
         else
         {
-            await DisplayAlert("Error", "No se pudo guardar", "OK");
+            await DisplayAlert("Error", "Could not add student.", "OK");
         }
     }
 }

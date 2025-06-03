@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Maui.Controls;
 using NotasAcademicasApp.Views;
 using NotasAcademicasApp.Services;
 

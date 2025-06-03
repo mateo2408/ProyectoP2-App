@@ -1,4 +1,8 @@
-﻿namespace NotasAcademicasApp;
+﻿using System;
+using Microsoft.Maui.Accessibility;
+using Microsoft.Maui.Controls;
+
+namespace NotasAcademicasApp;
 
 public partial class MainPage : ContentPage
 {

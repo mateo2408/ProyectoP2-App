@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Maui.Controls;
 using NotasAcademicasApp.Models;
 using NotasAcademicasApp.Services;
@@ -7,6 +8,7 @@ namespace NotasAcademicasApp.Views;
 public partial class NotaFormPage : ContentPage
 {
     private readonly NotaService _service = new();
+
     public NotaFormPage()
     {
         InitializeComponent();
@@ -14,31 +16,30 @@ public partial class NotaFormPage : ContentPage
 
     private async void OnGuardarNota(object sender, EventArgs e)
     {
-        if (!int.TryParse(estudianteEntry.Text, out int estudianteId) ||
-            !int.TryParse(materiaEntry.Text, out int materiaId) ||
-            !decimal.TryParse(calificacionEntry.Text, out decimal calificacion))
-        {
-            await DisplayAlert("Error", "Por favor, ingrese valores válidos.", "OK");
-            return;
-        }
-
+        int.TryParse(estudianteEntry.Text, out int estudianteId);
+        int.TryParse(materiaEntry.Text, out int materiaId);
+        double.TryParse(calificacionEntry.Text, out double calificacion);
+    
         var nota = new NotaAcademica
         {
+            Titulo = tituloEntry.Text,
+            Contenido = contenidoEntry.Text,
+            Fecha = fechaPicker.Date,
             EstudianteId = estudianteId,
             MateriaId = materiaId,
             Calificacion = calificacion,
             FechaEvaluacion = fechaPicker.Date
         };
-
-        var success = await _service.CreateNotaAsync(nota);
-        if (success)
+    
+        var response = await _service.CreateNotaAsync(nota);
+        if (response)
         {
-            await DisplayAlert("Éxito", "Nota guardada.", "OK");
+            await DisplayAlert("Success", "Note added.", "OK");
             await Navigation.PopAsync();
         }
         else
         {
-            await DisplayAlert("Error", "No se pudo guardar.", "OK");
+            await DisplayAlert("Error", "Could not add note.", "OK");
         }
     }
 }

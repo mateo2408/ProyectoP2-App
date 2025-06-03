@@ -1,4 +1,6 @@
-﻿namespace NotasAcademicasApp;
+﻿using Microsoft.Maui.Controls;
+
+namespace NotasAcademicasApp;
 
 public partial class AppShell : Shell
 {

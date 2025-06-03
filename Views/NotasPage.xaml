@@ -1,36 +1,17 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             x:Class="NotasAcademicasApp.Views.NotasPage"
-             Title="Notas"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:NotasAcademicas.App.Views"
-             xmlns:models="clr-namespace:NotasAcademicasApp.Models"
-             xmlns:local="clr-namespace:NotasAcademicasApp.Views"
-             xmlns:models1="clr-namespace:NotasAcademicasApp.Models"
-             xmlns:viewModels="clr-namespace:NotasAcademicasApp.ViewModels">
-
-    <ContentPage.BindingContext>
-        <viewModels:NotaViewModel />
-    </ContentPage.BindingContext>
-
+             x:Class="NotasAcademicasApp.Views.NotasPage"
+             Title="Notas">
     <StackLayout Padding="10">
-        <Button Text="Actualizar" Clicked="OnActualizarNotas"/>
-        <Button Text="Agregar Nota" Clicked="OnAgregarNota" />
-        <CollectionView ItemsSource="{Binding Notas}">
+        <Button Text="Agregar Nota" Clicked="OnAgregarNota"/>
+        <CollectionView x:Name="NotasCollectionView">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models1:NotaAcademica">
-                    <Frame BorderColor="Gray" Margin="5">
-                        <StackLayout>
-                            <Label Text="Estudiante ID:" FontAttributes="Bold" />
-                            <Label Text="{Binding EstudianteId}" />
-                            <Label Text="Materia ID:" FontAttributes="Bold" />
-                            <Label Text="{Binding MateriaId}" />
-                            <Label Text="Calificación:" FontAttributes="Bold" />
-                            <Label Text="{Binding Calificacion}" />
-                            <Label Text="Fecha:" FontAttributes="Bold" />
-                            <Label Text="{Binding FechaEvaluacion}" />
-                        </StackLayout>
-                    </Frame>
+                <DataTemplate>
+                    <StackLayout Padding="5">
+                        <Label Text="{Binding Titulo}" FontAttributes="Bold"/>
+                        <Label Text="{Binding Contenido}" />
+                        <Label Text="{Binding Calificacion, StringFormat='Calificación: {0}'}"/>
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

@@ -1,32 +1,22 @@
-namespace NotasAcademicasApp.Services;
-
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Json;
-using Models;
+using System.Threading.Tasks;
+using NotasAcademicasApp.Models;
 
+namespace NotasAcademicasApp.Services;
 
 public class EstudianteService
 {
-    private readonly HttpClient _httpClient;
-
-    public EstudianteService()
-    {
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri("http://10.0.2.2:5000/api/")
-        };
-    }
+    private readonly HttpClient _client = new() { BaseAddress = new Uri("http://localhost:5201/api/") };
 
     public async Task<List<Estudiante>> GetEstudiantesAsync()
-    {
-        var response = await _httpClient.GetAsync("Estudiantes");
-        return response.IsSuccessStatusCode
-            ? await response.Content.ReadFromJsonAsync<List<Estudiante>>() ?? new()
-            : new();
-    }
+        => await _client.GetFromJsonAsync<List<Estudiante>>("Estudiantes") ?? new();
 
     public async Task<bool> CreateEstudianteAsync(Estudiante estudiante)
     {
-        var response = await _httpClient.PostAsJsonAsync("Estudiantes", estudiante);
+        var response = await _client.PostAsJsonAsync("Estudiantes", estudiante);
         return response.IsSuccessStatusCode;
     }
 }

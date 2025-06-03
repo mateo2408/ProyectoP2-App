@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+
 namespace NotasAcademicasApp.Services;
 
 using System.Net.Http.Json;
@@ -11,7 +16,7 @@ public class MateriaService
     {
         _httpClient = new HttpClient
         {
-            BaseAddress = new Uri("http://10.0.2.2:5000/api/")
+            BaseAddress = new Uri("http://localhost:5201/api/")
         };
     }
 

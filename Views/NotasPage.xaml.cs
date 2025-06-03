@@ -1,19 +1,19 @@
+using System;
 using Microsoft.Maui.Controls;
-using NotasAcademicasApp.Views;
+using NotasAcademicasApp.Services;
 
 namespace NotasAcademicasApp.Views;
 
 public partial class NotasPage : ContentPage
 {
-    public NotasPage()
-    {
-        InitializeComponent();
-    }
+    private readonly NotaService _service = new();
 
-    private async void OnActualizarNotas(object sender, EventArgs e)
+    public NotasPage() => InitializeComponent();
+
+    protected override async void OnAppearing()
     {
-        if (BindingContext is NotasAcademicasApp.ViewModels.NotaViewModel vm)
-            await vm.LoadNotasAsync();
+        base.OnAppearing();
+        NotasCollectionView.ItemsSource = await _service.GetNotasAsync();
     }
 
     private async void OnAgregarNota(object sender, EventArgs e)
