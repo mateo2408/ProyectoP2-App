@@ -11,7 +11,7 @@ public class NotaService
     {
         _httpClient = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:5081/api/")
+            BaseAddress = new Uri("http://10.0.2.2:5000/api/")
         };
     }
 
