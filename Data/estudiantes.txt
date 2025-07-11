@@ -1,0 +1,23 @@
+[
+  {
+    "Id": 1,
+    "Nombre": "Juan Pérez"
+  },
+  {
+    "Id": 2,
+    "Nombre": "María García"
+  },
+  {
+    "Id": 3,
+    "Nombre": "Carlos Rodríguez"
+  },
+  {
+    "Id": 4,
+    "Nombre": "Ana López"
+  },
+  {
+    "Id": 5,
+    "Nombre": "Luis Martínez"
+  }
+]
+

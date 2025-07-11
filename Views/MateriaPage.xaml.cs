@@ -1,28 +1,22 @@
-using System;
-using Microsoft.Maui.Controls;
-using NotasAcademicasApp.Views;
-using NotasAcademicasApp.Services;
+using NotasAcademicasApp.ViewModels;
 
 namespace NotasAcademicasApp.Views;
 
 public partial class MateriaPage : ContentPage
 {
-    private readonly MateriaService _service = new();
-
-    public MateriaPage()
+    public MateriaPage(MateriaViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        var materias = await _service.GetMateriasAsync();
-        MateriasCollectionView.ItemsSource = materias;
-    }
-
-    private async void OnAgregarMateria(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MateriaFormPage());
+        if (BindingContext is MateriaViewModel viewModel)
+        {
+            // Call the async method directly instead of Command.Execute
+            await viewModel.LoadMateriasAsync();
+        }
     }
 }

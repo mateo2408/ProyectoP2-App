@@ -2,15 +2,91 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NotasAcademicasApp.Views.EstudiantesPage"
-             Title="Estudiantes">
-    <StackLayout Padding="10">
-        <Button Text="Agregar Estudiante" Clicked="OnAgregarEstudiante"/>
-        <CollectionView x:Name="EstudiantesCollectionView">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Nombre}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+             Title="Lista de Estudiantes">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header with Add Button -->
+        <Grid Grid.Row="0" Padding="10" BackgroundColor="#2196F3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Label Grid.Column="0" Text="👨‍🎓 Estudiantes" FontSize="20" FontAttributes="Bold" 
+                   TextColor="White" VerticalOptions="Center"/>
+            
+            <Button Grid.Column="1" Text="+ Agregar" BackgroundColor="White" TextColor="#2196F3"
+                    Command="{Binding NavigateToAddCommand}" CornerRadius="5" Padding="15,5"/>
+        </Grid>
+
+        <!-- Students List -->
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsLoading}" 
+                     Command="{Binding LoadEstudiantesCommand}">
+            <CollectionView ItemsSource="{Binding Estudiantes}" 
+                           SelectionMode="Single"
+                           SelectedItem="{Binding SelectedEstudiante}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="15" BackgroundColor="White">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewStudentNotesCommand}" 
+                                                     CommandParameter="{Binding}"/>
+                            </Grid.GestureRecognizers>
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Student Icon -->
+                            <Frame Grid.Column="0" BackgroundColor="#E3F2FD" CornerRadius="25" 
+                                   Padding="10" WidthRequest="50" HeightRequest="50" HasShadow="False">
+                                <Label Text="👨‍🎓" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Frame>
+
+                            <!-- Student Info -->
+                            <StackLayout Grid.Column="1" Margin="15,0,0,0" VerticalOptions="Center">
+                                <Label Text="{Binding Nombre}" FontSize="16" FontAttributes="Bold" TextColor="#333"/>
+                                <Label Text="{Binding Id, StringFormat='ID: {0}'}" FontSize="12" TextColor="#666"/>
+                            </StackLayout>
+
+                            <!-- Actions -->
+                            <StackLayout Grid.Column="2" Orientation="Horizontal" VerticalOptions="Center">
+                                <Button Text="📝" BackgroundColor="Transparent" TextColor="#2196F3" 
+                                       Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewStudentNotesCommand}"
+                                       CommandParameter="{Binding}" ToolTipProperties.Text="Ver Notas"/>
+                                <Button Text="🗑️" BackgroundColor="Transparent" TextColor="#F44336" 
+                                       Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteEstudianteCommand}"
+                                       CommandParameter="{Binding}" ToolTipProperties.Text="Eliminar"/>
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="50">
+                        <Label Text="📚" FontSize="48" HorizontalOptions="Center" TextColor="#999"/>
+                        <Label Text="No hay estudiantes registrados" FontSize="16" HorizontalOptions="Center" TextColor="#666"/>
+                        <Label Text="Toca el botón 'Agregar' para crear el primer estudiante" FontSize="12" HorizontalOptions="Center" TextColor="#999"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Footer with Export Option -->
+        <Grid Grid.Row="2" Padding="10" BackgroundColor="#f5f5f5">
+            <Button Text="📤 Exportar a TXT" Command="{Binding ExportToFileCommand}" 
+                    BackgroundColor="#4CAF50" TextColor="White" CornerRadius="5"/>
+        </Grid>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="1" IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" 
+                          Color="#2196F3" VerticalOptions="Center" HorizontalOptions="Center"/>
+    </Grid>
 </ContentPage>

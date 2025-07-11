@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NotasAcademicasApp.Views.NotasPage"
-             Title="Lista de Notas">
+             x:Class="NotasAcademicasApp.Views.StudentNotesPage"
+             Title="{Binding StudentName, StringFormat='Notas de {0}'}">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -10,24 +11,32 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Header with Add Button -->
-        <Grid Grid.Row="0" Padding="10" BackgroundColor="#FF5722">
+        <!-- Header with Student Info -->
+        <Grid Grid.Row="0" Padding="15" BackgroundColor="#2196F3">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
-            <Label Grid.Column="0" Text="📝 Notas Académicas" FontSize="20" FontAttributes="Bold" 
-                   TextColor="White" VerticalOptions="Center"/>
+            <Frame Grid.Column="0" BackgroundColor="White" CornerRadius="25" 
+                   Padding="8" WidthRequest="40" HeightRequest="40" HasShadow="False">
+                <Label Text="👨‍🎓" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Frame>
             
-            <Button Grid.Column="1" Text="+ Agregar" BackgroundColor="White" TextColor="#FF5722"
-                    Command="{Binding NavigateToAddCommand}" CornerRadius="5" Padding="15,5"/>
+            <StackLayout Grid.Column="1" Margin="10,0,0,0" VerticalOptions="Center">
+                <Label Text="{Binding StudentName}" FontSize="18" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="{Binding StudentNotesCount, StringFormat='{0} notas registradas'}" FontSize="12" TextColor="White"/>
+            </StackLayout>
+            
+            <Button Grid.Column="2" Text="+ Nueva Nota" BackgroundColor="White" TextColor="#2196F3"
+                    Command="{Binding AddNoteCommand}" CornerRadius="5" Padding="10,5"/>
         </Grid>
 
         <!-- Notes List -->
         <RefreshView Grid.Row="1" IsRefreshing="{Binding IsLoading}" 
-                     Command="{Binding LoadNotasCommand}">
-            <CollectionView ItemsSource="{Binding Notas}">
+                     Command="{Binding LoadStudentNotesCommand}">
+            <CollectionView ItemsSource="{Binding StudentNotes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="15" BackgroundColor="White" Margin="5">
@@ -48,12 +57,12 @@
                             
                             <!-- Delete Button -->
                             <Button Grid.Row="0" Grid.Column="1" Text="🗑️" BackgroundColor="Transparent" 
-                                   TextColor="#F44336" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteNotaCommand}"
+                                   TextColor="#F44336" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteNoteCommand}"
                                    CommandParameter="{Binding}" ToolTipProperties.Text="Eliminar Nota"/>
 
                             <!-- Note Content -->
                             <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Contenido}" 
-                                   FontSize="14" TextColor="#666" MaxLines="2" LineBreakMode="TailTruncation"/>
+                                   FontSize="14" TextColor="#666" MaxLines="3" LineBreakMode="TailTruncation"/>
 
                             <!-- Grade and Date -->
                             <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
@@ -75,25 +84,12 @@
                                 </StackLayout>
                             </Grid>
 
-                            <!-- Student and Subject Info -->
-                            <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="0,5,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <Frame Grid.Column="0" BackgroundColor="#E3F2FD" CornerRadius="10" 
-                                       Padding="8,4" HasShadow="False" Margin="0,0,5,0">
-                                    <Label Text="{Binding EstudianteId, StringFormat='👨‍🎓 ID: {0}'}" 
-                                           FontSize="11" TextColor="#1976D2"/>
-                                </Frame>
-                                
-                                <Frame Grid.Column="1" BackgroundColor="#E8F5E8" CornerRadius="10" 
-                                       Padding="8,4" HasShadow="False" Margin="5,0,0,0">
-                                    <Label Text="{Binding MateriaId, StringFormat='📖 ID: {0}'}" 
-                                           FontSize="11" TextColor="#2E7D32"/>
-                                </Frame>
-                            </Grid>
+                            <!-- Subject -->
+                            <Frame Grid.Row="3" Grid.ColumnSpan="2" BackgroundColor="#E8F5E8" 
+                                   CornerRadius="10" Padding="8,4" Margin="0,5,0,0" HasShadow="False">
+                                <Label Text="{Binding MateriaId, StringFormat='Materia ID: {0}'}" 
+                                       FontSize="11" TextColor="#2E7D32"/>
+                            </Frame>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -101,20 +97,32 @@
                     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="50">
                         <Label Text="📝" FontSize="48" HorizontalOptions="Center" TextColor="#999"/>
                         <Label Text="No hay notas registradas" FontSize="16" HorizontalOptions="Center" TextColor="#666"/>
-                        <Label Text="Toca el botón 'Agregar' para crear la primera nota" FontSize="12" HorizontalOptions="Center" TextColor="#999"/>
+                        <Label Text="Toca 'Nueva Nota' para agregar la primera nota" FontSize="12" HorizontalOptions="Center" TextColor="#999"/>
                     </StackLayout>
                 </CollectionView.EmptyView>
             </CollectionView>
         </RefreshView>
 
-        <!-- Footer with Export Option -->
-        <Grid Grid.Row="2" Padding="10" BackgroundColor="#f5f5f5">
-            <Button Text="📤 Exportar a TXT" Command="{Binding ExportToFileCommand}" 
-                    BackgroundColor="#9C27B0" TextColor="White" CornerRadius="5"/>
+        <!-- Footer with Statistics -->
+        <Grid Grid.Row="2" Padding="15" BackgroundColor="#f5f5f5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackLayout Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Start">
+                <Label Text="📊" FontSize="14"/>
+                <Label Text="{Binding AverageGrade, StringFormat='Promedio: {0:F1}'}" 
+                       FontSize="14" FontAttributes="Bold" TextColor="#2196F3"/>
+            </StackLayout>
+            
+            <Button Grid.Column="1" Text="🔙 Volver" Command="{Binding GoBackCommand}" 
+                    BackgroundColor="#757575" TextColor="White" CornerRadius="5" HorizontalOptions="End"/>
         </Grid>
 
         <!-- Loading Indicator -->
         <ActivityIndicator Grid.Row="1" IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" 
-                          Color="#FF5722" VerticalOptions="Center" HorizontalOptions="Center"/>
+                          Color="#2196F3" VerticalOptions="Center" HorizontalOptions="Center"/>
     </Grid>
 </ContentPage>
+

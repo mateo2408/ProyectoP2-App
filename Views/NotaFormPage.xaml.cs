@@ -1,45 +1,43 @@
-using System;
 using Microsoft.Maui.Controls;
-using NotasAcademicasApp.Models;
-using NotasAcademicasApp.Services;
+using NotasAcademicasApp.ViewModels;
 
 namespace NotasAcademicasApp.Views;
 
+[QueryProperty(nameof(StudentId), "studentId")]
+[QueryProperty(nameof(ReturnToStudent), "returnToStudent")]
 public partial class NotaFormPage : ContentPage
 {
-    private readonly NotaService _service = new();
+    public string? StudentId { get; set; }
+    public string? ReturnToStudent { get; set; }
 
-    public NotaFormPage()
+    public NotaFormPage(NotaViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
-    private async void OnGuardarNota(object sender, EventArgs e)
+    protected override async void OnAppearing()
     {
-        int.TryParse(estudianteEntry.Text, out int estudianteId);
-        int.TryParse(materiaEntry.Text, out int materiaId);
-        double.TryParse(calificacionEntry.Text, out double calificacion);
-    
-        var nota = new NotaAcademica
+        base.OnAppearing();
+        
+        if (BindingContext is NotaViewModel viewModel)
         {
-            Titulo = tituloEntry.Text,
-            Contenido = contenidoEntry.Text,
-            Fecha = fechaPicker.Date,
-            EstudianteId = estudianteId,
-            MateriaId = materiaId,
-            Calificacion = calificacion,
-            FechaEvaluacion = fechaPicker.Date
-        };
-    
-        var response = await _service.CreateNotaAsync(nota);
-        if (response)
-        {
-            await DisplayAlert("Success", "Note added.", "OK");
-            await Navigation.PopAsync();
-        }
-        else
-        {
-            await DisplayAlert("Error", "Could not add note.", "OK");
+            // Load students and subjects for dropdowns
+            await viewModel.LoadEstudiantesAsync();
+            await viewModel.LoadMateriasAsync();
+            
+            // If coming from student notes page, pre-select the student
+            if (!string.IsNullOrEmpty(StudentId) && int.TryParse(StudentId, out int studentId))
+            {
+                viewModel.EstudianteId = studentId;
+                // Find and select the corresponding student object
+                await Task.Delay(100); // Small delay to ensure data is loaded
+                var student = viewModel.Estudiantes.FirstOrDefault(e => e.Id == studentId);
+                if (student != null)
+                {
+                    viewModel.SelectedEstudiante = student;
+                }
+            }
         }
     }
 }

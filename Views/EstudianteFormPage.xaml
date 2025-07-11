@@ -1,10 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NotasAcademicasApp.Views.EstudianteFormPage"
              Title="Agregar Estudiante">
-    <StackLayout Padding="10">
-        <Entry x:Name="nombreEntry" Placeholder="Nombre" />
-        <Entry x:Name="apellidoEntry" Placeholder="Apellido" />
-        <Button Text="Guardar" Clicked="OnGuardarEstudiante"/>
-    </StackLayout>
+    
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Frame Grid.Row="0" BackgroundColor="#2196F3" CornerRadius="10" Padding="20" HasShadow="True">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="👨‍🎓" FontSize="24" VerticalOptions="Center"/>
+                    <Label Text="Nuevo Estudiante" FontSize="20" FontAttributes="Bold" 
+                           TextColor="White" VerticalOptions="Center" Margin="10,0,0,0"/>
+                </StackLayout>
+            </Frame>
+
+            <!-- Form Fields -->
+            <StackLayout Grid.Row="1" Spacing="15">
+                <Label Text="Información del Estudiante" FontSize="16" FontAttributes="Bold" TextColor="#333"/>
+                
+                <Frame BackgroundColor="#F8F9FA" CornerRadius="8" Padding="0" HasShadow="False">
+                    <Entry Placeholder="Nombre completo del estudiante" 
+                           Text="{Binding Nombre}"
+                           FontSize="16" Margin="15,10"/>
+                </Frame>
+            </StackLayout>
+
+            <!-- Preview -->
+            <Frame Grid.Row="2" BackgroundColor="#E8F5E8" CornerRadius="8" Padding="15" 
+                   IsVisible="{Binding Nombre, Converter={StaticResource StringNotNullOrEmptyConverter}}" HasShadow="False">
+                <StackLayout>
+                    <Label Text="Vista previa:" FontSize="12" TextColor="#2E7D32" FontAttributes="Bold"/>
+                    <StackLayout Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Text="👨‍🎓" FontSize="16"/>
+                        <Label Text="{Binding Nombre}" FontSize="14" FontAttributes="Bold" 
+                               TextColor="#2E7D32" VerticalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+
+            <!-- Instructions -->
+            <Frame Grid.Row="3" BackgroundColor="#FFF3E0" CornerRadius="8" Padding="15" HasShadow="False">
+                <StackLayout>
+                    <Label Text="ℹ️ Instrucciones" FontSize="14" FontAttributes="Bold" TextColor="#E65100"/>
+                    <Label FontSize="12" TextColor="#E65100" Margin="0,5,0,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="• Ingrese el nombre completo del estudiante"/>
+                                <Span Text="&#x0a;• El estudiante aparecerá en la lista principal"/>
+                                <Span Text="&#x0a;• Podrá agregar notas posteriormente"/>
+                                <Span Text="&#x0a;• Los datos se guardarán automáticamente en SQLite y .txt"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </Frame>
+
+            <!-- Spacer -->
+            <Grid Grid.Row="4"/>
+
+            <!-- Action Buttons -->
+            <Grid Grid.Row="5" ColumnSpacing="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Text="❌ Cancelar" 
+                        BackgroundColor="#757575" TextColor="White" 
+                        Command="{Binding CancelCommand}" CornerRadius="8" Padding="0,12"/>
+
+                <Button Grid.Column="1" Text="✅ Guardar" 
+                        BackgroundColor="#4CAF50" TextColor="White" 
+                        Command="{Binding SaveCommand}" CornerRadius="8" Padding="0,12"/>
+            </Grid>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator Grid.Row="5" IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" 
+                              Color="#2196F3" VerticalOptions="Center" HorizontalOptions="Center"/>
+        </Grid>
+    </ScrollView>
 </ContentPage>

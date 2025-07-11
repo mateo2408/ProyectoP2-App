@@ -1,30 +1,23 @@
-using System;
 using Microsoft.Maui.Controls;
-using NotasAcademicasApp.Services;
+using NotasAcademicasApp.ViewModels;
 
 namespace NotasAcademicasApp.Views;
 
 public partial class EstudiantesPage : ContentPage
 {
-    private readonly EstudianteService _service = new();
-
-    public EstudiantesPage()
+    public EstudiantesPage(EstudianteViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        var estudiantes = await _service.GetEstudiantesAsync();
-        if (EstudiantesCollectionView != null)
+        if (BindingContext is EstudianteViewModel viewModel)
         {
-            EstudiantesCollectionView.ItemsSource = estudiantes;
+            // Fix: Call the async method directly instead of Command.Execute
+            await viewModel.LoadEstudiantesAsync();
         }
-    }
-
-    private async void OnAgregarEstudiante(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new EstudianteFormPage());
     }
 }

@@ -1,0 +1,33 @@
+[
+  {
+    "Id": 1,
+    "Titulo": "Examen de Álgebra",
+    "Contenido": "Examen sobre ecuaciones lineales y cuadráticas",
+    "Fecha": "2025-07-10T10:00:00",
+    "EstudianteId": 1,
+    "MateriaId": 1,
+    "Calificacion": 8.5,
+    "FechaEvaluacion": "2025-07-10T00:00:00"
+  },
+  {
+    "Id": 2,
+    "Titulo": "Tarea de Cinemática",
+    "Contenido": "Problemas de movimiento uniforme y acelerado",
+    "Fecha": "2025-07-09T14:30:00",
+    "EstudianteId": 2,
+    "MateriaId": 2,
+    "Calificacion": 9.2,
+    "FechaEvaluacion": "2025-07-09T00:00:00"
+  },
+  {
+    "Id": 3,
+    "Titulo": "Laboratorio de Química",
+    "Contenido": "Práctica sobre reacciones ácido-base",
+    "Fecha": "2025-07-08T16:00:00",
+    "EstudianteId": 3,
+    "MateriaId": 3,
+    "Calificacion": 7.8,
+    "FechaEvaluacion": "2025-07-08T00:00:00"
+  }
+]
+

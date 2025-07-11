@@ -4,14 +4,53 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:NotasAcademicasApp.Views"
-    Shell.FlyoutBehavior="Disabled"
-    Title="NotasAcademicasApp">
+    Shell.FlyoutBehavior="Flyout"
+    Title="Notas Académicas">
 
-    <ShellContent
-        Title="Notas" ContentTemplate="{DataTemplate views:NotasPage}" />
-    <ShellContent
-        Title="Estudiante" ContentTemplate="{DataTemplate views:EstudiantesPage}"/>
-    <ShellContent
-        Title="Materias" ContentTemplate="{DataTemplate views:MateriaPage}"/>
+    <!-- Flyout Header -->
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="200" BackgroundColor="#2196F3">
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="📚" FontSize="48" HorizontalOptions="Center" TextColor="White"/>
+                <Label Text="Notas Académicas" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="White"/>
+                <Label Text="Sistema de Gestión" FontSize="14" HorizontalOptions="Center" TextColor="White"/>
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Navigation Items - Fixed Structure -->
+    <FlyoutItem Title="Estudiantes" Icon="📚">
+        <Tab Title="Lista de Estudiantes">
+            <ShellContent ContentTemplate="{DataTemplate views:EstudiantesPage}" Route="estudiantes"/>
+        </Tab>
+        <Tab Title="Agregar Estudiante">
+            <ShellContent ContentTemplate="{DataTemplate views:EstudianteFormPage}" Route="estudiante-form"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Materias" Icon="📖">
+        <Tab Title="Lista de Materias">
+            <ShellContent ContentTemplate="{DataTemplate views:MateriaPage}" Route="materias"/>
+        </Tab>
+        <Tab Title="Agregar Materia">
+            <ShellContent ContentTemplate="{DataTemplate views:MateriaFormPage}" Route="materia-form"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Notas" Icon="📝">
+        <Tab Title="Lista de Notas">
+            <ShellContent ContentTemplate="{DataTemplate views:NotasPage}" Route="notas"/>
+        </Tab>
+        <Tab Title="Agregar Nota">
+            <ShellContent ContentTemplate="{DataTemplate views:NotaFormPage}" Route="nota-form"/>
+        </Tab>
+    </FlyoutItem>
+
+    <!-- Flyout Footer -->
+    <Shell.FlyoutFooter>
+        <Grid HeightRequest="50" BackgroundColor="#f0f0f0">
+            <Label Text="© 2025 Notas Académicas" FontSize="12" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray"/>
+        </Grid>
+    </Shell.FlyoutFooter>
 
 </Shell>

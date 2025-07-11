@@ -3,13 +3,158 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NotasAcademicasApp.Views.NotaFormPage"
              Title="Agregar Nota">
-    <StackLayout Padding="10">
-        <Entry x:Name="estudianteEntry" Placeholder="ID Estudiante" Keyboard="Numeric" />
-        <Entry x:Name="materiaEntry" Placeholder="ID Materia" Keyboard="Numeric" />
-        <Entry x:Name="calificacionEntry" Placeholder="Calificación" Keyboard="Numeric" />
-        <Entry x:Name="tituloEntry" Placeholder="Title" />
-        <Entry x:Name="contenidoEntry" Placeholder="Content" />
-        <DatePicker x:Name="fechaPicker" />
-        <Button Text="Guardar" Clicked="OnGuardarNota"/>
-    </StackLayout>
+    
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Frame Grid.Row="0" BackgroundColor="#FF5722" CornerRadius="10" Padding="20" HasShadow="True">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="📝" FontSize="24" VerticalOptions="Center"/>
+                    <Label Text="Nueva Nota Académica" FontSize="20" FontAttributes="Bold" 
+                           TextColor="White" VerticalOptions="Center" Margin="10,0,0,0"/>
+                </StackLayout>
+            </Frame>
+
+            <!-- Form Fields -->
+            <StackLayout Grid.Row="1" Spacing="15">
+                <Label Text="Información de la Nota" FontSize="16" FontAttributes="Bold" TextColor="#333"/>
+                
+                <!-- Title -->
+                <Frame BackgroundColor="#F8F9FA" CornerRadius="8" Padding="0" HasShadow="False">
+                    <Entry Placeholder="Título de la nota" 
+                           Text="{Binding Titulo}"
+                           FontSize="16" Margin="15,10"/>
+                </Frame>
+
+                <!-- Content -->
+                <Frame BackgroundColor="#F8F9FA" CornerRadius="8" Padding="0" HasShadow="False">
+                    <Editor Placeholder="Contenido o descripción de la nota" 
+                           Text="{Binding Contenido}"
+                           FontSize="14" Margin="15,10" HeightRequest="80"/>
+                </Frame>
+
+                <!-- Student Selection -->
+                <StackLayout>
+                    <Label Text="👨‍🎓 Estudiante" FontSize="14" FontAttributes="Bold" TextColor="#333"/>
+                    <Frame BackgroundColor="#E3F2FD" CornerRadius="8" Padding="0" HasShadow="False">
+                        <Picker ItemsSource="{Binding Estudiantes}" 
+                               SelectedItem="{Binding SelectedEstudiante}"
+                               ItemDisplayBinding="{Binding Nombre}"
+                               Title="Seleccionar estudiante" 
+                               FontSize="14" Margin="15,10"/>
+                    </Frame>
+                </StackLayout>
+
+                <!-- Subject Selection -->
+                <StackLayout>
+                    <Label Text="📖 Materia" FontSize="14" FontAttributes="Bold" TextColor="#333"/>
+                    <Frame BackgroundColor="#E8F5E8" CornerRadius="8" Padding="0" HasShadow="False">
+                        <Picker ItemsSource="{Binding Materias}" 
+                               SelectedItem="{Binding SelectedMateria}"
+                               ItemDisplayBinding="{Binding Nombre}"
+                               Title="Seleccionar materia" 
+                               FontSize="14" Margin="15,10"/>
+                    </Frame>
+                </StackLayout>
+
+                <!-- Grade and Dates -->
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0">
+                        <Label Text="📊 Calificación" FontSize="14" FontAttributes="Bold" TextColor="#333"/>
+                        <Frame BackgroundColor="#F8F9FA" CornerRadius="8" Padding="0" HasShadow="False">
+                            <Entry Placeholder="0.0 - 10.0" 
+                                   Text="{Binding Calificacion}"
+                                   Keyboard="Numeric"
+                                   FontSize="14" Margin="15,10"/>
+                        </Frame>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1">
+                        <Label Text="📅 Fecha" FontSize="14" FontAttributes="Bold" TextColor="#333"/>
+                        <Frame BackgroundColor="#F8F9FA" CornerRadius="8" Padding="0" HasShadow="False">
+                            <DatePicker Date="{Binding FechaEvaluacion}" 
+                                       FontSize="14" Margin="15,10"/>
+                        </Frame>
+                    </StackLayout>
+                </Grid>
+            </StackLayout>
+
+            <!-- Preview -->
+            <Frame Grid.Row="2" BackgroundColor="#FFF3E0" CornerRadius="8" Padding="15" 
+                   IsVisible="{Binding Titulo, Converter={StaticResource StringNotNullOrEmptyConverter}}" HasShadow="False">
+                <StackLayout>
+                    <Label Text="👁️ Vista previa" FontSize="12" TextColor="#E65100" FontAttributes="Bold"/>
+                    <StackLayout Margin="0,5,0,0">
+                        <Label Text="{Binding Titulo}" FontSize="14" FontAttributes="Bold" TextColor="#E65100"/>
+                        <Label Text="{Binding Contenido}" FontSize="12" TextColor="#E65100" MaxLines="2"/>
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding SelectedEstudiante.Nombre, StringFormat='👨‍🎓 {0}'}" 
+                                   FontSize="11" TextColor="#E65100"/>
+                            <Label Grid.Column="1" Text="{Binding SelectedMateria.Nombre, StringFormat='📖 {0}'}" 
+                                   FontSize="11" TextColor="#E65100"/>
+                        </Grid>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+
+            <!-- Instructions -->
+            <Frame Grid.Row="3" BackgroundColor="#E8F5E8" CornerRadius="8" Padding="15" HasShadow="False">
+                <StackLayout>
+                    <Label Text="ℹ️ Instrucciones" FontSize="14" FontAttributes="Bold" TextColor="#2E7D32"/>
+                    <Label FontSize="12" TextColor="#2E7D32" Margin="0,5,0,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="• Complete todos los campos requeridos"/>
+                                <Span Text="&#x0a;• Seleccione un estudiante de la lista"/>
+                                <Span Text="&#x0a;• Seleccione una materia de la lista"/>
+                                <Span Text="&#x0a;• La calificación debe estar entre 0.0 y 10.0"/>
+                                <Span Text="&#x0a;• Los datos se guardarán en SQLite y .txt automáticamente"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </Frame>
+
+            <!-- Spacer -->
+            <Grid Grid.Row="4"/>
+
+            <!-- Action Buttons -->
+            <Grid Grid.Row="5" ColumnSpacing="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Text="❌ Cancelar" 
+                        BackgroundColor="#757575" TextColor="White" 
+                        Command="{Binding CancelCommand}" CornerRadius="8" Padding="0,12"/>
+
+                <Button Grid.Column="1" Text="✅ Guardar" 
+                        BackgroundColor="#FF5722" TextColor="White" 
+                        Command="{Binding SaveCommand}" CornerRadius="8" Padding="0,12"/>
+            </Grid>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator Grid.Row="5" IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" 
+                              Color="#FF5722" VerticalOptions="Center" HorizontalOptions="Center"/>
+        </Grid>
+    </ScrollView>
 </ContentPage>

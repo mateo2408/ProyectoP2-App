@@ -1,23 +1,22 @@
-using System;
-using Microsoft.Maui.Controls;
-using NotasAcademicasApp.Services;
+using NotasAcademicasApp.ViewModels;
 
 namespace NotasAcademicasApp.Views;
 
 public partial class NotasPage : ContentPage
 {
-    private readonly NotaService _service = new();
-
-    public NotasPage() => InitializeComponent();
+    public NotasPage(NotaViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        NotasCollectionView.ItemsSource = await _service.GetNotasAsync();
-    }
-
-    private async void OnAgregarNota(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new NotaFormPage());
+        if (BindingContext is NotaViewModel viewModel)
+        {
+            // Properly call the async method directly instead of using Command
+            await viewModel.LoadNotasAsync();
+        }
     }
 }
